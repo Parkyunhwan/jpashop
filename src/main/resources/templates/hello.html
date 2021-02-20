@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<!-- html 내용으로 타임리프의 주소를 줌-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<!--
+th:text="'안녕하세요. ' + ${data}" : data는 컨트롤러에서 모델에 넣어준 값!
+기본값으론 : 안녕하세요. 손님 이 나옴.
+-->
+<p th:text="'안녕. ' + ${data}" >안녕하세요. 손님</p>
+</body>
+</html>
