@@ -25,6 +25,10 @@ public class OrderItem {
     private int OrderPrice; // 주문 당시 가격
     private int count; // 주문 수
 
+    protected OrderItem() { //제약용
+        // 생성자 스타일의 생성을 막는 것 (똑같은 스타일 유지를 위해 사용)
+    }
+
     //==생성 메서드==//
 
     /**

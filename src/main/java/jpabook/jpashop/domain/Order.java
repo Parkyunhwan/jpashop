@@ -55,6 +55,9 @@ public class Order {
         delivery.setOrder(this);
     }
 
+    protected Order() { //제약용
+        // 생성자 스타일의 생성을 막는 것 (똑같은 스타일 유지를 위해 사용)
+    }
     // Order안에 Delivery도 들어가고 OrderItem도 들어가는 등 생성할 게 많아 매우 복잡하다. 생성메서드 사용
     //==생성 메서드==/
 
