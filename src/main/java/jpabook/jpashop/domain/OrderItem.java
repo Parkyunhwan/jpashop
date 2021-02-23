@@ -24,4 +24,38 @@ public class OrderItem {
 
     private int OrderPrice; // 주문 당시 가격
     private int count; // 주문 수
+
+    //==생성 메서드==//
+
+    /**
+     * orderItem 을 생성과 생성하면서 수행해야할 비즈니스 로직 처리
+     * @param item
+     * @param orderPrice
+     * @param count
+     * @return orderItem
+     */
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count); // 상품을 주문했으므로 상품 재고에서 count만큼 감소 시킴
+        return orderItem;
+    }
+
+
+    //==비즈니스로직==//
+
+    /**
+     * 주문 상품 취소
+     * - 상품 재고 증가
+     */
+    public void cancle() {
+        getItem().addStock(count); // lombok의 getter 사용 + Item의 비즈니스 로직 사용 (재고 증가)
+    }
+
+    public int getTotalPrice() {
+        return (getOrderPrice() * getCount());
+    }
 }

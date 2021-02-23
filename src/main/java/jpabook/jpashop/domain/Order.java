@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import jpabook.jpashop.domain.em.DeliveryStatus;
 import jpabook.jpashop.domain.em.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,5 +53,56 @@ public class Order {
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
+    }
+
+    // Order안에 Delivery도 들어가고 OrderItem도 들어가는 등 생성할 게 많아 매우 복잡하다. 생성메서드 사용
+    //==생성 메서드==/
+
+    /**
+     * 주문 생성에 대한 비즈니스 로직을 모아둠 (응집)
+     * @param member
+     * @param delivery
+     * @param orderItems
+     * @return
+     */
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    //== 비즈니스 로직 ==/
+    /**
+     * 주문 취소
+     */
+    public void cancle() {
+        if (delivery.getDeliveryStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다.");
+        }
+
+        this.setStatus(OrderStatus.CANCEL);
+        for (OrderItem orderItem : orderItems) { // Order 객체 내 orderItems
+            orderItem.cancle(); // 각각의 상품에 대해서 cancle 상태로 만들어 주는 것
+        }
+    }
+
+    /**
+     * 전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            //totalPrice += orderItem.getOrderPrice(); xxx (주문 수량을 곱하지 않은 가격)
+            //사실 getCount()해서 Order내에서 처리해도 되지만 그건 객체의 자율성을 침해한다고 볼 수 있다.
+            //OrderItem의 비즈니스 로직에서 구현 하도록 하자.
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
     }
 }
