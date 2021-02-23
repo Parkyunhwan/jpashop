@@ -1,6 +1,7 @@
 package jpabook.jpashop.service;
 
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,13 @@ public class ItemService { // 단순히 레포지토리에 위임하는 서비�
     public void saveItem(Item item) {
         validateDuplicateMember(item.getName());
         itemRepository.save(item);
+    }
+
+    @Transactional
+    public void updateItem(Long itemId, String name, int price, int Quantity) {
+        Item findItem = itemRepository.findOne(itemId);
+        findItem.setPrice(price);
+        // 트랜잭션 안에서 다시 조회한 객체를 변경 하면 커밋 시점에 더티 체킹에 의해 DB에 UPDATE 쿼리가 날라간다.
     }
 
     public void validateDuplicateMember(String name) {
